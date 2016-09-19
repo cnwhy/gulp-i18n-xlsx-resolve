@@ -1,0 +1,23 @@
+{
+  "name": "gulp-i18n-xlsx-resolve",
+  "version": "0.0.1",
+  "description": "拆解exel文件生成语言包",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "i18n",
+    "l10n"
+  ],
+  "author": {
+    "name": "cnwhy",
+    "email": "w.why@163.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.1",
+    "xlsx": "^0.8.0"
+  }
+}
