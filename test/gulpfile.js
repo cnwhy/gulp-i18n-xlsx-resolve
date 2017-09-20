@@ -25,8 +25,9 @@ gulp.task('i18n',function(){
             'type':"ini" //输出为ini
             ,'passColumns':['bak']
             ,'langMap':langMap
+            ,'concat':'langs'
     }))
-    .pipe(concat("langs.ini"))
+    //.pipe(concat("langs.ini"))
     .pipe(gulp.dest('./language'))
 
 })

@@ -118,7 +118,7 @@ function gulpI18n(opt) {
 			array.forEach(function(v){
 				var refname = getRefName(v)
 				if(refname){
-					map = refname.split('.');
+					map = opt.nosplit ? [refname] : refname.split('.');
 					for(k in v){
 						var langname = tolanName(k)
 						if(langname){
@@ -145,6 +145,14 @@ function gulpI18n(opt) {
 		return refstr;
 	}
 
+	function json2iniCenter(json){
+		var inistr = '';
+		for(var name in json){
+			inistr += jsoi2ini(name,json[name])+'\n';
+		}
+		return inistr;
+	}
+
 	// 创建一个让每个文件通过的 stream 通道
 	return through.obj(function(file, enc, cb) {
 
@@ -154,7 +162,7 @@ function gulpI18n(opt) {
 			return cb();
 		}
 		if (file.isBuffer()) {
-			switch (opt.type.toLocaleLowerCase()){
+			switch (opt.type){
 				case 'json':
 					xlsx2json(file.contents)
 					break;
@@ -172,20 +180,35 @@ function gulpI18n(opt) {
 		cb();
 
 	},function(cb){
-		for(var lan in outjson){
+		if(opt.concat){
 			var nfile;
-			switch (opt.type.toLocaleLowerCase()){
+			switch (opt.type){
 				case 'json':
+				nfile = new File({path:  opt.concat + '.json',});
+				nfile.contents = new Buffer(JSON.stringify(outjson),'utf-8');
+				break;
+				case 'ini':
+				nfile = new File({path: opt.concat + '.ini',});
+				nfile.contents = new Buffer(json2iniCenter(outjson),'utf-8');
+				break;
+			}
+			this.push(nfile);
+		}else{
+			for(var lan in outjson){
+				var nfile;
+				switch (opt.type){
+					case 'json':
 					nfile = new File({path: lan + '.json',});
 					nfile.contents = new Buffer(JSON.stringify(outjson[lan]),'utf-8');
 					break;
-				case 'ini':
+					case 'ini':
 					nfile = new File({path: lan + '.ini',});
 					nfile.contents = new Buffer(jsoi2ini(lan,outjson[lan]),'utf-8');
 					break;
+				}
+				//console.log(nfile);
+				this.push(nfile);
 			}
-			//console.log(nfile);
-			this.push(nfile);
 		}
 		cb();
 	});

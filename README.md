@@ -35,7 +35,9 @@ gulp.task('i18n',function(){
         'type':'json'   // 输出为 'ini' or 'json' 默认 'json'
         ,'keyColumnName':"key"  //引用列的名称 默认为 'key'
         ,'passColumns':['bak']  //不输出的列
-        ,'langMap':langMap      //语言映射
+        ,'langMap': langMap      //语言映射
+        //,'concat':'concatfilename' //合并语言包，的包名，不设置则不合并
+        //,'nosplit': false //设为true时，不拆开key字段，直接以key字段值做为键名，ini无影响 ， 默认false
     }))
     .pipe(gulp.dest('./language'))
 
