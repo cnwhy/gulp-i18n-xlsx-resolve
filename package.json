@@ -1,7 +1,7 @@
 {
   "name": "gulp-i18n-xlsx-resolve",
-  "version": "0.1.0",
-  "description": "拆解exel文件生成语言包",
+  "version": "0.1.1",
+  "description": "Generation language pack from Excel(xls,xlsx) ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
