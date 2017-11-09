@@ -15,7 +15,17 @@ var defopt = {
 	type : DEF_TYPE,
 	keyColumnName: KEY_COLUMN,
 	langMap: {},
-	passColumns: []
+	passColumns: [],
+	sheets: null
+}
+
+
+function toLowerCaseFormat(arr){
+	if(Array.isArray(arr)){
+		return arr.map(function(v){return String(v).toLocaleLowerCase()})
+	}else{
+		return [String(arr).toLocaleLowerCase()]
+	}
 }
 
 function gulpI18n(opt) {
@@ -37,13 +47,14 @@ function gulpI18n(opt) {
 	if(!opt.type) opt.type =  opt.type ? opt.type.toLocaleLowerCase() : DEF_TYPE;
 
 	if(!opt.keyColumnName) opt.keyColumnName = KEY_COLUMN
-	
-	if(opt.passColumns){
-		if(typeof opt.passColumns == 'string'){
-			opt.passColumns = [opt.passColumns];
-		}
-	}
 
+	var formatOpt = ['passColumns','sheets'];
+	
+	formatOpt.forEach(function(key){
+		opt[key] = opt[key] ? toLowerCaseFormat(opt[key]) : undefined;
+	})
+
+	//判断是否为非翻译字段
 	function isPassColumn(ColumnName){
 		if(isRefName(ColumnName)) return true;
 		if(opt.passColumns){
@@ -55,7 +66,7 @@ function gulpI18n(opt) {
 			}
 		}
 	}
-
+	//key自段
 	function isRefName(ColumnName){
 		return ColumnName.toLocaleLowerCase() == opt.keyColumnName.toLocaleLowerCase();
 	}
@@ -109,6 +120,13 @@ function gulpI18n(opt) {
 	function xlsx2json(data,noNested){
 		var workbook = XLSX.read(data);
 		var sheet_name_list = workbook.SheetNames;
+		console.log(sheet_name_list,'|',opt.sheets)
+		if(opt.sheets){
+			sheet_name_list = sheet_name_list.filter(function(v){
+				return opt.sheets.includes(v.toLocaleLowerCase());
+			})
+		}
+		console.log(sheet_name_list)
 		for(var i = 0; i<sheet_name_list.length; i++){
 			var sheetName = sheet_name_list[i];
 			var worksheet = workbook.Sheets[sheetName];
