@@ -1,6 +1,6 @@
 {
   "name": "gulp-i18n-xlsx-resolve",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Generation language pack from Excel(xls,xlsx) ",
   "main": "index.js",
   "scripts": {
